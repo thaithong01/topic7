@@ -41,7 +41,7 @@ public class Tc01 {
         Assert.assertEquals(String.valueOf(selectOptionYear.size()),"112");
     }
 
-    @Test
+//    @Test
     public void xuLiHTMLDropdownList2(){
         driver.get("https://rode.com/en/support/where-to-buy");
         Select select = new Select(driver.findElement(By.xpath("//select[@id='country']")));
@@ -55,6 +55,52 @@ public class Tc01 {
         for(WebElement thanhphan: ListName){
             System.out.println(thanhphan.getText());
         }
+    }
+
+//    @Test
+    public void xuLiHTMLDropDownList6(){
+        driver.get("https://applitools.com/automating-tests-chrome-devtools-recorder-webinar/");
+        Select SelectPersonRole = new Select(driver.findElement(By.xpath("//select[@id='Person_Role__c']")));
+        SelectPersonRole.selectByVisibleText("Student");
+
+        Select SelectTestFramework = new Select(driver.findElement(By.xpath("//select[@id='Test_Framework__c']")));
+        SelectTestFramework.selectByVisibleText("Selenium");
+
+        Select SelectCountry = new Select(driver.findElement(By.xpath("//select[@id='Self_Report_Country__c']")));
+        SelectCountry.selectByVisibleText("Canada");
+    }
+
+    @Test
+    public void customDropDown(){
+        driver.get("https://jqueryui.com/resources/demos/selectmenu/default.html");
+        driver.findElement(By.xpath("//span[@id='speed-button']")).click();
+        sleepSecond(3);
+        List<WebElement> ListSpeed = driver.findElements(By.xpath("//ul[@id='speed-menu']//li"));
+        for (WebElement itemListSpeed: ListSpeed){
+            if (itemListSpeed.getText().equals("Medium")){
+                itemListSpeed.click();
+                break;
+            }
+        }
+
+        sleepSecond(3);
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='speed-button']//span[@class='ui-selectmenu-text']")).getText(),"Medium");
+        sleepSecond(2);
+
+        driver.findElement(By.xpath("//span[@id='files-button']")).click();
+        sleepSecond(3);
+        List<WebElement> ListFile = driver.findElements(By.xpath("//ul[@id='files-menu']//li[@class='ui-menu-item']"));
+        for (WebElement itemListFile: ListFile){
+            if (itemListFile.getText().equals("ui.jQuery.js")){
+                itemListFile.click();
+                break;
+            }
+        }
+        sleepSecond(3);
+        Assert.assertEquals(driver.findElement(By.xpath("//span[@id='files-button']//span[@class='ui-selectmenu-text']")).getText(),"ui.jQuery.js");
+        sleepSecond(2);
+
+
     }
 
     @AfterTest

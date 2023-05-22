@@ -3,10 +3,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.Color;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+
+import java.awt.*;
+import java.io.IOException;
 
 public class topic9 {
 
@@ -51,7 +55,7 @@ public class topic9 {
     }
 
     @Test
-    public void demoJavascruptAlert(){
+    public void demoJavascriptAlert(){
         driver.get("https://automationfc.github.io/basic-form/index.html");
         driver.findElement(By.xpath("//button[@onclick='jsAlert()']")).click();
         String actualAlertMessage = driver.switchTo().alert().getText();
@@ -60,6 +64,60 @@ public class topic9 {
         driver.switchTo().alert().dismiss();
 //        Assert.assertTrue(driver.findElement(By.xpath("//p[contains(text(),'You clicked an alert successfully ')]")).isDisplayed());
         Assert.assertEquals(driver.findElement(By.xpath("//p[@id='result']")).getText(),"You clicked an alert successfully");
+    }
+
+    @Test
+    public void demoAuthenticationAlert() throws IOException {
+        //cách 1
+//        String url = "http://admin:admin@the-internet.herokuapp.com/basic_auth";
+//        driver.get(url);
+
+        //cách 2
+        String username = "admin";
+        String password = "admin";
+        String chromeAuthen = "E:\\Selenium\\topic7\\autoIT\\authen_chrome.exe";
+        String authenUrl = "http://the-internet.herokuapp.com/basic_auth";
+        Runtime.getRuntime().exec(new String[] {chromeAuthen, username, password});
+
+        driver.get(authenUrl);
+        sleepSecond(3);
+    }
+
+    @Test
+    public void tc1Button(){
+        driver.get("https://www.fahasa.com/customer/account/create");
+        driver.findElement(By.xpath("//li[@class='popup-login-tab-item popup-login-tab-login']")).click();
+        Assert.assertFalse(driver.findElement(By.xpath("//button[@class='fhs-btn-login']")).isEnabled());
+
+        String cssRGBColorValue = driver.findElement(By.xpath("//button[@class='fhs-btn-login']")).getCssValue("color");
+        String cssHexColorValue = Color.fromString(cssRGBColorValue).asHex();
+        Assert.assertEquals(cssHexColorValue,"#636363");
+
+        driver.findElement(By.xpath("//input[@id='login_username']")).sendKeys("thaithong@gmail.com");
+        driver.findElement(By.xpath("//input[@id='login_password']")).sendKeys("thaithong");
+        Assert.assertTrue(driver.findElement(By.xpath("//button[@class='fhs-btn-login']")).isEnabled());
+
+        String cssEnableRGBColorValue = driver.findElement(By.xpath("//button[@class='fhs-btn-login']")).getCssValue("background-color");
+        String cssEnableHexColorValue = Color.fromString(cssEnableRGBColorValue).asHex().toUpperCase();
+        Assert.assertEquals(cssEnableHexColorValue,"#C92127");
+    }
+
+    @Test
+    public void tc2DefaultCheckboxRadiobutton(){
+        driver.get("https://demos.telerik.com/kendo-ui/checkbox/index");
+        driver.findElement(By.xpath("//label[text()='Dual-zone air conditioning']/preceding-sibling::input")).click();
+        Assert.assertTrue(driver.findElement(By.xpath("//label[text()='Dual-zone air conditioning']/preceding-sibling::input")).isSelected());
+        driver.findElement(By.xpath("//label[text()='Dual-zone air conditioning']/preceding-sibling::input")).click();
+        Assert.assertFalse(driver.findElement(By.xpath("//label[text()='Dual-zone air conditioning']/preceding-sibling::input")).isSelected());
+        driver.get("https://demos.telerik.com/kendo-ui/radiobutton/index");
+        driver.findElement(By.xpath("//label[text()='2.0 Petrol, 147kW']/preceding-sibling::input")).click();
+        if (driver.findElement(By.xpath("//label[text()='2.0 Petrol, 147kW']/preceding-sibling::input")).isSelected()){
+            Assert.assertTrue(driver.findElement(By.xpath("//label[text()='2.0 Petrol, 147kW']/preceding-sibling::input")).isSelected());
+        }
+        else {
+            driver.findElement(By.xpath("//label[text()='2.0 Petrol, 147kW']/preceding-sibling::input")).click();
+            Assert.assertTrue(driver.findElement(By.xpath("//label[text()='2.0 Petrol, 147kW']/preceding-sibling::input")).isSelected());
+        }
     }
 
     @AfterTest

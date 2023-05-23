@@ -120,6 +120,42 @@ public class topic9 {
         }
     }
 
+    @Test
+    public void tc3DefaultChecboxRadioButton(){
+        driver.get("https://material.angular.io/components/radio/examples");
+        driver.findElement(By.xpath("//input[@value='Summer']")).click();
+        if (driver.findElement(By.xpath("//input[@value='Summer']")).isSelected()){
+            Assert.assertTrue(driver.findElement(By.xpath("//input[@value='Summer']")).isSelected());
+        }
+        else {
+            driver.findElement(By.xpath("//input[@value='Summer']")).click();
+            Assert.assertTrue(driver.findElement(By.xpath("//input[@value='Summer']")).isSelected());
+        }
+        sleepSecond(2);
+
+        driver.get("https://material.angular.io/components/checkbox/examples");
+        driver.findElement(By.xpath("//label[text()='Checked']/preceding-sibling::div//input")).click();
+        driver.findElement(By.xpath("//label[text()='Indeterminate']/preceding-sibling::div//input")).click();
+        Assert.assertTrue(driver.findElement(By.xpath("//label[text()='Checked']/preceding-sibling::div//input")).isSelected());
+        Assert.assertTrue(driver.findElement(By.xpath("//label[text()='Indeterminate']/preceding-sibling::div//input")).isSelected());
+        sleepSecond(2);
+
+        driver.findElement(By.xpath("//label[text()='Checked']/preceding-sibling::div//input")).click();
+        driver.findElement(By.xpath("//label[text()='Indeterminate']/preceding-sibling::div//input")).click();
+        Assert.assertFalse(driver.findElement(By.xpath("//label[text()='Checked']/preceding-sibling::div//input")).isSelected());
+        Assert.assertFalse(driver.findElement(By.xpath("//label[text()='Indeterminate']/preceding-sibling::div//input")).isSelected());
+    }
+
+    @Test
+    public void tc4CustomCheckboxOrRadioButton(){
+        driver.get("https://tiemchungcovid19.gov.vn/portal/register-person");
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].click();",driver.findElement(By.xpath("//input[@id='mat-radio-3-input']")));
+        Assert.assertTrue(driver.findElement(By.xpath("//input[@id='mat-radio-3-input']")).isSelected());
+    }
+
+
+
     @AfterTest
     public void end() throws InterruptedException {
         Thread.sleep(5000);

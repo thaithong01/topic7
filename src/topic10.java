@@ -46,6 +46,7 @@ public class topic10 {
         actions.moveToElement(elementLi4).release().perform();
         List<WebElement> listLi = driver.findElements(By.xpath("//li[@class='ui-state-default ui-selectee ui-selected']"));
         Assert.assertEquals(listLi.size(),4);
+
 //        List<WebElement> listLi = driver.findElements(By.xpath("//li[@class='ui-state-default ui-selectee ui-selected']"));
 //        for (WebElement listtam: listLi ){
 //

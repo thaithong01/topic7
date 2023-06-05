@@ -53,6 +53,49 @@ public class topic10 {
 //        }
     }
 
+    @Test
+    public void tc5(){
+        driver.get("https://automationfc.github.io/jquery-selectable/");
+        Actions actions = new Actions(driver);
+        //Move chuột đến nút 1 và nhấn giữ Ctrl
+        actions.moveToElement(driver.findElement(By.xpath("//li[text()=1]"))).click().keyDown(Keys.CONTROL).perform();
+        sleepSecond(1);
+        actions.moveToElement(driver.findElement(By.xpath("//li[text()=3]"))).click().perform();
+        sleepSecond(1);
+        actions.moveToElement(driver.findElement(By.xpath("//li[text()=6]"))).click().perform();
+        sleepSecond(1);
+        //sau khi di chuyển chuột đến nút 11 và click vào nó thì dùng thêm hành động release để dừng hành động nhấn giữ Ctrl ở trên
+        actions.moveToElement(driver.findElement(By.xpath("//li[text()=11]"))).click().release().perform();
+        sleepSecond(1);
+
+        List<WebElement> listLi = driver.findElements(By.xpath("//li[@class='ui-state-default ui-selectee ui-selected']"));
+        Assert.assertEquals(listLi.size(),4);
+//        List<WebElement> listTc5 = driver.findElements(By.xpath("//li[@class='ui-state-default ui-selectee ui-selected']"));
+//        for (WebElement tam: listTc5){
+//            Assert.assertTrue(tam.isSelected());
+//        }
+    }
+
+    @Test
+    public void tc6(){
+        driver.get("https://automationfc.github.io/basic-form/index.html");
+        Actions actions = new Actions(driver);
+        actions.moveToElement(driver.findElement(By.xpath("//button[@ondblclick]"))).doubleClick().perform();
+        Assert.assertTrue(driver.findElement(By.xpath("//p[text()='Hello Automation Guys!']")).isDisplayed());
+    }
+
+    @Test
+    public void tc7(){
+        driver.get("http://swisnl.github.io/jQuery-contextMenu/demo.html");
+        Actions actions = new Actions(driver);
+        actions.moveToElement(driver.findElement(By.xpath("//span[@class='context-menu-one btn btn-neutral']"))).contextClick().perform();
+        actions.moveToElement(driver.findElement(By.xpath("//li[@class='context-menu-item context-menu-icon context-menu-icon-quit']"))).perform();
+        Assert.assertTrue(driver.findElement(By.xpath("//li[@class='context-menu-item context-menu-icon context-menu-icon-quit context-menu-hover context-menu-visible']")).isDisplayed());
+        actions.click(driver.findElement(By.xpath("//li[@class='context-menu-item context-menu-icon context-menu-icon-quit context-menu-hover context-menu-visible']"))).perform();
+        driver.switchTo().alert().accept();
+        Assert.assertFalse(driver.findElement(By.xpath("//li[@class='context-menu-item context-menu-icon context-menu-icon-quit']")).isDisplayed());
+    }
+
     @AfterTest
     public void end() throws InterruptedException {
         Thread.sleep(5000);

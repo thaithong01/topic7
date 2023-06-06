@@ -96,6 +96,37 @@ public class topic10 {
         Assert.assertFalse(driver.findElement(By.xpath("//li[@class='context-menu-item context-menu-icon context-menu-icon-quit']")).isDisplayed());
     }
 
+    @Test
+    public void tc8(){
+        driver.get("https://automationfc.github.io/kendo-drag-drop/");
+        Actions actions = new Actions(driver);
+        WebElement sourceElement = driver.findElement(By.xpath("//div[@id='draggable']"));
+        WebElement targetElement = driver.findElement(By.xpath("//div[@id='droptarget']"));
+        actions.moveToElement(sourceElement).dragAndDrop(sourceElement, targetElement).perform();
+        Assert.assertTrue(driver.findElement(By.xpath("//div[text()='You did great!']")).isDisplayed());
+        WebElement colorBackground = driver.findElement(By.xpath("//div[text()='You did great!']"));
+        String rgbColorBackground = colorBackground.getCssValue("background-color");
+        String hexColorBackground = Color.fromString(rgbColorBackground).asHex();
+        Assert.assertEquals(hexColorBackground,"#03a9f4");
+    }
+
+    @Test
+    public void tc9(){
+        driver.get("https://automationfc.github.io/drag-drop-html5/");
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+//        WebElement columnA = (WebElement) js.executeScript("return document.querySelector(argument[0];",
+//                driver.findElement(By.cssSelector("div#column-a")));
+//        WebElement columnB = (WebElement) js.executeScript("return document.querySelector(argument[0];",
+//                driver.findElement(By.cssSelector("div#column-b")));
+
+        WebElement A = driver.findElement(By.xpath("//div[@id='column-a']"));
+        WebElement B = driver.findElement(By.xpath("//div[@id='column-b']"));
+        Actions actions = new Actions(driver);
+        actions.moveToElement(A).dragAndDrop(A, B).build().perform();
+        sleepSecond(2);
+        actions.moveToElement(A).dragAndDrop(A, B).build().perform();
+    }
+
     @AfterTest
     public void end() throws InterruptedException {
         Thread.sleep(5000);

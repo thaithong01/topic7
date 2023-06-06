@@ -114,17 +114,17 @@ public class topic10 {
     public void tc9(){
         driver.get("https://automationfc.github.io/drag-drop-html5/");
         JavascriptExecutor js = (JavascriptExecutor) driver;
-//        WebElement columnA = (WebElement) js.executeScript("return document.querySelector(argument[0];",
-//                driver.findElement(By.cssSelector("div#column-a")));
-//        WebElement columnB = (WebElement) js.executeScript("return document.querySelector(argument[0];",
-//                driver.findElement(By.cssSelector("div#column-b")));
+        WebElement columnA = (WebElement) js.executeScript("return document.querySelector(argument[0];",
+                driver.findElement(By.cssSelector("div#column-a")));
+        WebElement columnB = (WebElement) js.executeScript("return document.querySelector(argument[0];",
+                driver.findElement(By.cssSelector("div#column-b")));
 
-        WebElement A = driver.findElement(By.xpath("//div[@id='column-a']"));
-        WebElement B = driver.findElement(By.xpath("//div[@id='column-b']"));
+//        WebElement A = driver.findElement(By.xpath("//div[@id='column-a']"));
+//        WebElement B = driver.findElement(By.xpath("//div[@id='column-b']"));
         Actions actions = new Actions(driver);
-        actions.moveToElement(A).dragAndDrop(A, B).build().perform();
+        actions.moveToElement(columnA).dragAndDrop(columnA, columnB).build().perform();
         sleepSecond(2);
-        actions.moveToElement(A).dragAndDrop(A, B).build().perform();
+        actions.moveToElement(columnA).dragAndDrop(columnA, columnB).build().perform();
     }
 
     @AfterTest

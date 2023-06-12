@@ -3,18 +3,29 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
+import java.util.List;
+
 public class topic11 {
     WebDriver driver;
+    public WebDriverWait wait;
 
     @BeforeTest
     public void start(){
         driver = new ChromeDriver();
         driver.manage().window().maximize();
+
+        // Khởi tạo WebDriverWait với thời gian chờ là 10 giây
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @Test
@@ -33,6 +44,41 @@ public class topic11 {
         driver.findElement(By.xpath("//button[@class='close']")).click();
         sleepSecond(2);
         Assert.assertFalse(driver.findElement(By.xpath("//div[@id='modal-login-v1']")).isDisplayed());
+    }
+
+    @Test
+    public void tc5(){
+        driver.get("https://www.javacodegeeks.com/");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@placeholder='Your Email']")));
+        Assert.assertTrue(driver.findElement(By.xpath("//input[@placeholder='Your Email']")).isDisplayed());
+
+    }
+
+    @Test
+    public void tc8(){
+        driver.get("https://skills.kynaenglish.vn/");
+        driver.switchTo().frame(0);
+        Assert.assertEquals(driver.findElement(By.xpath("//a[@title='Kyna.vn']/parent::div/following-sibling::div")).getText(),"165K followers");
+        driver.switchTo().defaultContent();
+        driver.switchTo().frame("cs_chat_iframe");
+        wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//label[text()='Chào bạn. Chúng tôi có thể giúp gì cho bạn?']/ancestor::div[@class='button_text']/following-sibling::div")));
+        driver.findElement(By.xpath("//label[text()='Chào bạn. Chúng tôi có thể giúp gì cho bạn?']/ancestor::div[@class='button_text']/following-sibling::div")).click();
+
+        driver.findElement(By.xpath("//div[@class='editing field profile_field']//input[@placeholder='Nhập tên của bạn']")).sendKeys("Darjeeling");
+        driver.findElement(By.xpath("//div[@class='editing field profile_field']//input[@placeholder='Nhập số điện thoại của bạn']")).sendKeys("0123456789");
+        WebElement selectItem =  driver.findElement(By.xpath("//select[@id='serviceSelect']"));
+        Select select = new Select(selectItem);
+        select.selectByVisibleText("TƯ VẤN TUYỂN SINH");
+
+        driver.switchTo().defaultContent();
+        driver.findElement(By.xpath("//input[@id='live-search-bar']")).sendKeys("Excel");
+        driver.findElement(By.xpath("//button[@class='search-button']")).click();
+
+        List<WebElement> list = driver.findElements(By.xpath("//div[@class='content']//h4"));
+        for (WebElement listTam : list){
+            Assert.assertTrue(listTam.getText().contains("Excel"));
+        }
     }
 
     @AfterTest

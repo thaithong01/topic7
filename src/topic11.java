@@ -12,8 +12,11 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import java.awt.*;
+import java.sql.SQLOutput;
 import java.time.Duration;
 import java.util.List;
+import java.util.Set;
 
 public class topic11 {
     WebDriver driver;
@@ -78,6 +81,64 @@ public class topic11 {
         List<WebElement> list = driver.findElements(By.xpath("//div[@class='content']//h4"));
         for (WebElement listTam : list){
             Assert.assertTrue(listTam.getText().contains("Excel"));
+        }
+    }
+
+    @Test
+    public void tc9(){
+        driver.get("https://netbanking.hdfcbank.com/netbanking/");
+        driver.switchTo().frame("login_page");
+        driver.findElement(By.xpath("//input[@name='fldLoginUserId']")).sendKeys("thaithong97");
+        driver.findElement(By.xpath("//a[@class='btn btn-primary login-btn']")).click();
+        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@type='password']"))).isDisplayed());
+    }
+
+    @Test
+    public void tc10(){
+        driver.get("https://automationfc.github.io/basic-form/index.html");
+        String parentID = driver.getWindowHandle();
+        String parent = driver.getTitle();
+        driver.findElement(By.xpath("//a[contains(text(),'GOOGLE')]")).click();
+        //Nếu không biết title của trang, có thể mở trang đó lên vd mở google.com ==> click f12 ==> chọn tab Console ==> nhập 'document.title'
+        switchToWindowsByTitle("Google");
+        sleepSecond(1);
+        Assert.assertEquals(driver.getTitle(),"Google");
+        switchToWindowsByTitle(parent);
+
+        driver.findElement(By.xpath("//a[contains(text(),'FACEBOOK')]")).click();
+        switchToWindowsByTitle("Facebook - log in or sign up");
+        sleepSecond(1);
+        Assert.assertEquals(driver.getTitle(),"Facebook – log in or sign up");
+        switchToWindowsByTitle(parent);
+
+        driver.findElement(By.xpath("//a[contains(text(),'TIKI')]")).click();
+        switchToWindowsByTitle("Tiki - Mua hàng online giá tốt, hàng chuẩn, ship nhanh");
+        sleepSecond(1);
+        Assert.assertEquals(driver.getTitle(),"Tiki - Mua hàng online giá tốt, hàng chuẩn, ship nhanh");
+        switchToWindowsByTitle(parent);
+
+        closedAllWindowsExceptParent(parentID);
+        switchToWindowsByTitle(parent);
+        Assert.assertEquals(driver.getCurrentUrl(),"https://automationfc.github.io/basic-form/index.html");
+    }
+
+    public void switchToWindowsByTitle(String titleParent){
+        Set<String> listSession = driver.getWindowHandles();
+        for (String sessionTam : listSession){
+            driver.switchTo().window(sessionTam);
+            String title = driver.getTitle();
+            if (title.equals(titleParent))
+                break;
+        }
+    }
+
+    public void closedAllWindowsExceptParent(String parentID){
+        Set<String> listSession = driver.getWindowHandles();
+        for (String sessionTam : listSession){
+            if (!sessionTam.equals(parentID)){
+                driver.switchTo().window(sessionTam);
+                driver.close();
+            }
         }
     }
 
